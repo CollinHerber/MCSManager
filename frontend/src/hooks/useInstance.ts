@@ -30,11 +30,15 @@ export const TYPE_MINECRAFT_BDS = "minecraft/bedrock/bds";
 export const TYPE_MINECRAFT_NUKKIT = "minecraft/bedrock/nukkit";
 export const TYPE_HYTALE = "hytale";
 export const TYPE_STEAM_SERVER_UNIVERSAL = "steam/universal";
+export const TYPE_PALWORLD = "steam/palworld";
+export const TYPE_ENSHROUDED = "steam/enshrouded";
 export const TYPE_TERRARIA = "steam/terraria";
 
 export const INSTANCE_TYPE_TRANSLATION: MapData<string> = {
   [TYPE_UNIVERSAL]: t("TXT_CODE_a92a4aa1"),
   [TYPE_STEAM_SERVER_UNIVERSAL]: t("TXT_CODE_3d7fbe30"),
+  [TYPE_PALWORLD]: t("TXT_CODE_palworld.type"),
+  [TYPE_ENSHROUDED]: "Enshrouded Dedicated Server",
   [TYPE_MINECRAFT_JAVA]: t("TXT_CODE_97f779b3"),
   [TYPE_MINECRAFT_BEDROCK]: t("TXT_CODE_7f1aef9f"),
   [TYPE_MINECRAFT_NUKKIT]: t("TXT_CODE_8f3e5807"),
@@ -168,6 +172,8 @@ export interface InstanceConfigs {
   type: string;
   info: string;
   category: string[];
+  initializeFrom?: string;
+  canInitialize?: boolean;
   conflict?: boolean;
   check?: boolean;
 }
@@ -412,6 +418,32 @@ export const INSTANCE_CONFIGS: InstanceConfigs[] = [
       TYPE_MINECRAFT_PURPUR,
       TYPE_MINECRAFT_LEAVES
     ]
+  },
+  {
+    fileName: "[Palworld/Linux] PalWorldSettings.ini",
+    path: "Pal/Saved/Config/LinuxServer/PalWorldSettings.ini",
+    redirect: "palworld/PalWorldSettings.ini",
+    type: "palworld_ini",
+    info: t("TXT_CODE_palworld.configInfo"),
+    initializeFrom: "DefaultPalWorldSettings.ini",
+    category: [TYPE_PALWORLD, TYPE_STEAM_SERVER_UNIVERSAL]
+  },
+  {
+    fileName: "[Palworld/Windows] PalWorldSettings.ini",
+    path: "Pal/Saved/Config/WindowsServer/PalWorldSettings.ini",
+    redirect: "palworld/PalWorldSettings.ini",
+    type: "palworld_ini",
+    info: t("TXT_CODE_palworld.configInfo"),
+    initializeFrom: "DefaultPalWorldSettings.ini",
+    category: [TYPE_PALWORLD, TYPE_STEAM_SERVER_UNIVERSAL]
+  },
+  {
+    fileName: "[Enshrouded] enshrouded_server.json",
+    path: "server/enshrouded_server.json",
+    redirect: "enshrouded/enshrouded_server.json",
+    type: "json",
+    info: "Configure server access and every documented Enshrouded gameplay setting.",
+    category: [TYPE_ENSHROUDED]
   },
   {
     fileName: "[Terraria] serverconfig.txt",
