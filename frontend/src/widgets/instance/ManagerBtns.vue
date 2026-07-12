@@ -6,6 +6,7 @@ import {
   TYPE_MINECRAFT_JAVA,
   TYPE_MINECRAFT_MCDR,
   TYPE_STEAM_SERVER_UNIVERSAL,
+  TYPE_WINDROSE,
   useInstanceInfo
 } from "@/hooks/useInstance";
 import { useServerConfig } from "@/hooks/useServerConfig";
@@ -138,6 +139,15 @@ const btns = computed(() => {
             type: instanceInfo.value?.config.type
           }
         });
+      }
+    },
+    {
+      title: "Windrose+ Web Panel",
+      icon: DashboardOutlined,
+      condition: () =>
+        !isGlobalTerminal.value && instanceInfo.value?.config.type === TYPE_WINDROSE,
+      click: () => {
+        toPage({ path: "/instances/terminal/windrosePlus" });
       }
     },
     {

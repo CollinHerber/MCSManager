@@ -1,0 +1,109 @@
+<script setup lang="ts">
+import CardPanel from "@/components/CardPanel.vue";
+import { useLayoutCardTools } from "@/hooks/useCardTools";
+import { useInstanceInfo } from "@/hooks/useInstance";
+import type { LayoutCard } from "@/types";
+import { computed, ref } from "vue";
+
+const props = defineProps<{ card: LayoutCard }>();
+const { getMetaOrRouteValue } = useLayoutCardTools(props.card);
+const instanceId = getMetaOrRouteValue("instanceId") ?? "";
+const daemonId = getMetaOrRouteValue("daemonId") ?? "";
+const { instanceInfo } = useInstanceInfo({ instanceId, daemonId, autoRefresh: true });
+
+const storageKey = `windrose-plus-panel:${daemonId}:${instanceId}`;
+const dashboardUrl = ref(localStorage.getItem(storageKey) ?? "");
+const activeUrl = ref(dashboardUrl.value);
+const frameKey = ref(0);
+const isHttps = window.location.protocol === "https:";
+
+const dashboardPort = computed(() => {
+  const ports = instanceInfo.value?.config?.docker?.ports ?? [];
+  const mapping = ports.find((port: string) => port.endsWith(":8780/tcp"));
+  if (!mapping) return "";
+  return mapping.split(":").at(-2) ?? "";
+});
+
+const detectedUrl = computed(() => {
+  if (!dashboardPort.value) return "";
+  return `http://${window.location.hostname}:${dashboardPort.value}`;
+});
+
+const isValidUrl = computed(() => {
+  if (!dashboardUrl.value) return false;
+  try {
+    return ["http:", "https:"].includes(new URL(dashboardUrl.value).protocol);
+  } catch {
+    return false;
+  }
+});
+
+const saveAndLoad = () => {
+  if (!isValidUrl.value) return;
+  const normalized = dashboardUrl.value.replace(/\/$/, "");
+  dashboardUrl.value = normalized;
+  activeUrl.value = normalized;
+  localStorage.setItem(storageKey, normalized);
+  frameKey.value += 1;
+};
+
+const useDetectedUrl = () => {
+  if (!detectedUrl.value) return;
+  dashboardUrl.value = detectedUrl.value;
+  saveAndLoad();
+};
+</script>
+
+<template>
+  <CardPanel style="height: 100%">
+    <template #body>
+      <a-space direction="vertical" style="width: 100%" size="middle">
+        <a-alert
+          v-if="!dashboardPort"
+          type="warning"
+          show-icon
+          message="Windrose+ dashboard port is not exposed"
+          description="Use the Windrose+ marketplace template or add a TCP mapping for container port 8780, then restart the instance."
+        />
+        <a-alert
+          v-else-if="isHttps && (!activeUrl || activeUrl.startsWith('http:'))"
+          type="info"
+          show-icon
+          message="HTTPS address required for embedding"
+          description="Browsers block an HTTP dashboard inside an HTTPS MCSManager page. Put the dashboard behind an HTTPS reverse proxy or Cloudflare Tunnel, then enter that public URL below."
+        />
+
+        <a-input-group compact style="display: flex">
+          <a-input
+            v-model:value="dashboardUrl"
+            placeholder="https://windrose-plus.example.com"
+            style="flex: 1"
+            @press-enter="saveAndLoad"
+          />
+          <a-button v-if="detectedUrl" @click="useDetectedUrl">Use detected local URL</a-button>
+          <a-button type="primary" :disabled="!isValidUrl" @click="saveAndLoad">
+            Save and load
+          </a-button>
+          <a-button v-if="activeUrl" :href="activeUrl" target="_blank">Open externally</a-button>
+        </a-input-group>
+
+        <a-alert
+          v-if="dashboardUrl && !isValidUrl"
+          type="error"
+          show-icon
+          message="Enter a valid HTTP or HTTPS dashboard URL."
+        />
+
+        <iframe
+          v-if="activeUrl"
+          :key="frameKey"
+          :src="activeUrl"
+          title="Windrose+ web panel"
+          allow="clipboard-read; clipboard-write"
+          style="width: 100%; height: 75vh; border: 0; border-radius: 6px"
+        />
+        <a-empty v-else description="Enter the Windrose+ dashboard URL to embed it here." />
+      </a-space>
+    </template>
+  </CardPanel>
+</template>
