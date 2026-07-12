@@ -36,13 +36,13 @@ The active machine currently keeps its canonical Compose file at `D:\MCS\docker-
 The Script fork is mounted read-only at:
 
 ```text
-/opt/mcsmanager/web/public/self-hosted-market
+/opt/mcsmanager/web/public/upload_files/self-hosted-market
 ```
 
 Set the panel's marketplace source to:
 
 ```text
-public/self-hosted-market/market-v2.json
+public/upload_files/self-hosted-market/market-v2.json
 ```
 
 Changes to `MCMS-Script/market-v2.json` are then served locally without rebuilding the panel image. Browser refresh/cache behavior still applies.

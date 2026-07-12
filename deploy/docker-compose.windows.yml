@@ -17,7 +17,7 @@ services:
       - "${MCS_ROOT:-D:/MCS}/Panel/data:/opt/mcsmanager/web/data"
       - "${MCS_ROOT:-D:/MCS}/Panel/logs:/opt/mcsmanager/web/logs"
       - "${MCS_ROOT:-D:/MCS}/Panel/upload_files:/opt/mcsmanager/web/public/upload_files"
-      - "${MCS_SCRIPT_ROOT:-D:/MCS/Source/MCMS-Script}:/opt/mcsmanager/web/public/self-hosted-market:ro"
+      - "${MCS_SCRIPT_ROOT:-D:/MCS/Source/MCMS-Script}:/opt/mcsmanager/web/public/upload_files/self-hosted-market:ro"
       - "${MCS_ROOT:-D:/MCS}/daemon/data:/opt/mcsmanager/daemon/data:ro"
 
   daemon:
