@@ -1,4 +1,3 @@
-import { useAppStateStore } from "@/stores/useAppStateStore";
 import { reportErrorMsg } from "@/tools/validator";
 import type { AxiosError, AxiosRequestConfig } from "axios";
 import axios from "axios";
@@ -7,6 +6,7 @@ import _ from "lodash";
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 axios.interceptors.request.use(async (config) => {
+  const { useAppStateStore } = await import("@/stores/useAppStateStore");
   const { state } = useAppStateStore();
   if (!config.params) config.params = {};
   config.params.token = state.userInfo?.token;
