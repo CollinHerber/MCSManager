@@ -1,1 +1,11 @@
-.gitignore
+.git
+.github
+.vscode
+.cursor
+**/node_modules
+node_modules
+production-code
+**/dist
+**/production
+*.log
+.env

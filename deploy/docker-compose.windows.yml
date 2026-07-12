@@ -1,0 +1,41 @@
+name: mcsmanager
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: dockerfile/web.dockerfile
+    image: ${MCS_WEB_IMAGE:-collinthedev/mcsmanager-web:local}
+    restart: unless-stopped
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    ports:
+      - "${MCS_WEB_PORT:-23333}:23333"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - "${MCS_ROOT:-D:/MCS}/Panel/data:/opt/mcsmanager/web/data"
+      - "${MCS_ROOT:-D:/MCS}/Panel/logs:/opt/mcsmanager/web/logs"
+      - "${MCS_ROOT:-D:/MCS}/Panel/upload_files:/opt/mcsmanager/web/public/upload_files"
+      - "${MCS_SCRIPT_ROOT:-D:/MCS/Source/MCMS-Script}:/opt/mcsmanager/web/public/self-hosted-market:ro"
+      - "${MCS_ROOT:-D:/MCS}/daemon/data:/opt/mcsmanager/daemon/data:ro"
+
+  daemon:
+    build:
+      context: ..
+      dockerfile: dockerfile/daemon.dockerfile
+      args:
+        EMBEDDED_JAVA_VERSION: "${MCS_JAVA_VERSION:-21}"
+    image: ${MCS_DAEMON_IMAGE:-collinthedev/mcsmanager-daemon:local}
+    restart: unless-stopped
+    ports:
+      - "${MCS_DAEMON_PORT:-24444}:24444"
+    environment:
+      MCSM_DOCKER_WORKSPACE_PATH: "${MCS_ROOT:-D:/MCS}"
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - "${MCS_ROOT:-D:/MCS}/daemon/data:/opt/mcsmanager/daemon/data"
+      - "${MCS_ROOT:-D:/MCS}/daemon/logs:/opt/mcsmanager/daemon/logs"
+      - "${MCS_ROOT:-D:/MCS}:/opt/mcsmanager/daemon/data/InstanceData"
+      - /var/run/docker.sock:/var/run/docker.sock
