@@ -20,8 +20,6 @@
 
 <br />
 
-[English](README.md) - [简体中文](README_ZH.md) - [繁體中文](README_TW.md) - [日本語](README_JP.md) - [Deutsch](README_DE.md) - [Русский](README_RU.md) - [Spanish](README_ES.md) - [Thai](README_TH.md) - [Français](README_FR.md) - [Português BR](README_PTBR.md)
-
 </div>
 
 <br />
@@ -32,7 +30,7 @@
 
 MCSManager has gained popularity within the **`Minecraft`** and **`Steam`** gaming communities. It enables you to manage multiple physical or virtual servers from a single platform, and offers a **secure**, **reliable**, and **granular multi-user permission system**. The MCSM Panel continues to support server administrators, operators, and independent developers, managing servers like **`Minecraft`**, **`Terraria`**, and other **`Steam`**-based games for them.
 
-MCSM also has **commercial applications** in mind, such as private server hosting and sales by **IDC service providers**. Several small and medium-sized enterprises already use the panel as a combined **server management** and **sales platform**. In addition, it supports **multi-language environments**, making it accessible to users across different countries and regions.
+MCSM also has **commercial applications** in mind, such as private server hosting and sales by **IDC service providers**. Several small and medium-sized enterprises already use the panel as a combined **server management** and **sales platform**.
 
 <img width="1871" height="1342" alt="terminal" src="https://github.com/user-attachments/assets/7f6ed988-e402-4347-94ee-a0469f6658da" />
 
@@ -68,8 +66,6 @@ The control panel runs on both **`Windows`** and **`Linux`** platforms. No datab
 ## Official Documentation
 
 English: https://docs.mcsmanager.com/
-
-Chinese: https://docs.mcsmanager.com/zh_cn/
 
 <br />
 
@@ -323,8 +319,6 @@ MCSManager supports all major modern browsers, including:
 - `Opera`
 
 **Internet Explorer (IE)** is no longer supported.
-
-<br />
 
 
 ## Contributors

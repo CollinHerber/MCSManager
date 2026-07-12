@@ -11,7 +11,7 @@ import {
 import { INSTANCE_TYPE_TRANSLATION } from "@/hooks/useInstance";
 import { SEARCH_ALL_KEY, useMarketPackages, type FilterOption } from "@/hooks/useMarketPackages";
 import { useScreen } from "@/hooks/useScreen";
-import { isCN, t } from "@/lang/i18n";
+import { t } from "@/lang/i18n";
 import { getNetworkModeList } from "@/services/apis/envImage";
 import { updateAnyInstanceConfig } from "@/services/apis/instance";
 import { dockerPortsArray } from "@/tools/common";
@@ -302,7 +302,7 @@ const openDialog = async ({ item, i }: { item?: QuickStartPackages; i?: number }
     activeKey.value = TabSettings.Template;
   } else if (Number(i) < 0) {
     formData.value.template = _.cloneDeep(defaultQuickStartPackages);
-    formData.value.template.language = isCN() ? "zh_cn" : "en_us";
+    formData.value.template.language = "en_us";
     isEditMode.value = false;
 
     formType.value = "template";

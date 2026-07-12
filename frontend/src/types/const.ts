@@ -61,35 +61,6 @@ RUN mkdir -p /workspace
 WORKDIR /workspace
 `;
 
-export const jdk8DockerfileCN = `FROM eclipse-temurin:8
-RUN echo "zh_CN.UTF-8 UTF-8">/etc/locale.gen && locale-gen
-ENV LANG=zh_CN.UTF-8
-ENV LANGUAGE=zh_CN.UTF-8
-ENV LC_ALL=zh_CN.UTF-8
-ENV TZ=Asia/Shanghai
-RUN mkdir -p /workspace
-WORKDIR /workspace
-`;
-
-export const ubuntu22DockerfileCN = `FROM ubuntu:22.04
-ENV TZ=Asia/Shanghai
-RUN sed -i -E 's/http:\\/\\/(archive|security).ubuntu.com/http:\\/\\/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
-RUN apt update && apt -y install libcurl4 && DEBIAN_FRONTEND="noninteractive" apt -y install tzdata
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN mkdir -p /workspace
-WORKDIR /workspace
-`;
-
-export const jdk17DockerfileCN = `FROM eclipse-temurin:17
-RUN echo "zh_CN.UTF-8 UTF-8">/etc/locale.gen && locale-gen
-ENV LANG=zh_CN.UTF-8
-ENV LANGUAGE=zh_CN.UTF-8
-ENV LC_ALL=zh_CN.UTF-8
-ENV TZ=Asia/Shanghai
-RUN mkdir -p /workspace
-WORKDIR /workspace
-`;
-
 export enum ScheduleActionTypeEnum {
   Delay = "delay",
   Command = "command",

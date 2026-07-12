@@ -5,7 +5,7 @@ import LeftMenusPanel from "@/components/LeftMenusPanel.vue";
 import Loading from "@/components/Loading.vue";
 import { useUploadFileDialog } from "@/components/fc";
 import { router } from "@/config/router";
-import { SUPPORTED_LANGS, isCN, t } from "@/lang/i18n";
+import { SUPPORTED_LANGS, t } from "@/lang/i18n";
 import { setSettingInfo, settingInfo } from "@/services/apis";
 import { useAppConfigStore } from "@/stores/useAppConfigStore";
 import { useLayoutConfigStore } from "@/stores/useLayoutConfig";
@@ -102,18 +102,6 @@ const menus = arrayFilter([
     key: "baseInfo",
     icon: ProjectOutlined
   },
-  // {
-  //   title: t("TXT_CODE_574ed474"),
-  //   key: "pro",
-  //   icon: SketchOutlined,
-  //   condition: () => isCN()
-  // },
-  // {
-  //   title: t("TXT_CODE_caf8ebb7"),
-  //   key: "redeem",
-  //   icon: KeyOutlined,
-  //   condition: () => isCN()
-  // },
   {
     title: t("TXT_CODE_1c18acc0"),
     key: "ui",
@@ -133,12 +121,7 @@ const menus = arrayFilter([
     title: t("TXT_CODE_46cb40d5"),
     key: "sponsor",
     icon: MoneyCollectOutlined,
-    condition: () => !isCN(),
-    click: () => {
-      let url = "https://www.patreon.com/mcsmanager";
-      if (isCN()) url = "https://afdian.com/a/mcsmanager";
-      window.open(url, "_blank");
-    }
+    click: () => window.open("https://www.patreon.com/mcsmanager", "_blank")
   },
   {
     title: t("TXT_CODE_3b4b656d"),

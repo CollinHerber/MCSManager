@@ -27,7 +27,7 @@ description: Core project rules for all AI assistants (Claude, Cursor, etc.)
 
 - **Frontend (Vue)**: use `t()` from `@/lang/i18n` for all translatable text.
 - **Backend / Daemon**: use `$t()` (e.g. from `daemon/src/i18n/index.ts`) for all user-facing text and error messages.
-- **Source language**: Add/keep source strings as short, correct English in `languages/en_us.json`. Other locales (e.g. `zh_CN`, `zh_TW`) are translations.
+- **Source language**: Add and maintain short, correct English strings in `languages/en_US.json`. This fork intentionally supports English only.
 
 ### 3.1 Parameterized Strings
 

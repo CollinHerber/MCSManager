@@ -11,13 +11,9 @@ import type { LayoutCard } from "@/types";
 import {
   defaultDockerfile,
   jdk17Dockerfile,
-  jdk17DockerfileCN,
   jdk8Dockerfile,
-  jdk8DockerfileCN,
-  ubuntu22Dockerfile,
-  ubuntu22DockerfileCN
+  ubuntu22Dockerfile
 } from "@/types/const";
-import { getCurrentLang } from "@/lang/i18n";
 import DockerFileForm from "./DockerFileForm.vue";
 import BuildProgress from "./BuildProgress.vue";
 
@@ -57,21 +53,20 @@ const imageList = [
 const dockerFile = ref("");
 const name = ref("");
 const version = ref("");
-const isZH = getCurrentLang() === "zh_cn" ? true : false;
 const selectType = (type: number) => {
   switch (type) {
     case 1:
-      dockerFile.value = isZH ? jdk8DockerfileCN : jdk8Dockerfile;
+      dockerFile.value = jdk8Dockerfile;
       name.value = "mcsm-eclipse-temurin";
       version.value = "8";
       break;
     case 2:
-      dockerFile.value = isZH ? jdk17DockerfileCN : jdk17Dockerfile;
+      dockerFile.value = jdk17Dockerfile;
       name.value = "mcsm-eclipse-temurin";
       version.value = "17";
       break;
     case 3:
-      dockerFile.value = isZH ? ubuntu22DockerfileCN : ubuntu22Dockerfile;
+      dockerFile.value = ubuntu22Dockerfile;
       name.value = "mcsm-ubuntu";
       version.value = "22.04";
       break;
