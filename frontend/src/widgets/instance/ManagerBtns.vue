@@ -10,6 +10,7 @@ import {
   useInstanceInfo
 } from "@/hooks/useInstance";
 import { useServerConfig } from "@/hooks/useServerConfig";
+import { useWindrosePlus } from "@/hooks/useWindrosePlus";
 import { t } from "@/lang/i18n";
 import { modListApi } from "@/services/apis/modManager";
 import { useAppStateStore } from "@/stores/useAppStateStore";
@@ -59,8 +60,13 @@ const { isAdmin, state } = useAppStateStore();
 
 const { getMetaOrRouteValue } = useLayoutCardTools(props.card);
 
-const instanceId = getMetaOrRouteValue("instanceId");
-const daemonId = getMetaOrRouteValue("daemonId");
+const instanceId = getMetaOrRouteValue("instanceId") ?? "";
+const daemonId = getMetaOrRouteValue("daemonId") ?? "";
+const {
+  enabled: windrosePlusEnabled,
+  isLoading: isWindrosePlusLoading,
+  confirmToggle: confirmWindrosePlusToggle
+} = useWindrosePlus(instanceId, daemonId);
 
 const { instanceInfo, execute, isGlobalTerminal } = useInstanceInfo({
   instanceId,
@@ -142,10 +148,23 @@ const btns = computed(() => {
       }
     },
     {
-      title: "Windrose+ Web Panel",
+      title: windrosePlusEnabled.value ? "Uninstall Windrose+" : "Install Windrose+",
       icon: DashboardOutlined,
       condition: () =>
         !isGlobalTerminal.value && instanceInfo.value?.config.type === TYPE_WINDROSE,
+      click: confirmWindrosePlusToggle,
+      props: {
+        loading: isWindrosePlusLoading.value,
+        danger: windrosePlusEnabled.value
+      }
+    },
+    {
+      title: "Windrose+ Web Panel",
+      icon: DashboardOutlined,
+      condition: () =>
+        !isGlobalTerminal.value &&
+        instanceInfo.value?.config.type === TYPE_WINDROSE &&
+        windrosePlusEnabled.value,
       click: () => {
         toPage({ path: "/instances/terminal/windrosePlus" });
       }

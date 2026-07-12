@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CardPanel from "@/components/CardPanel.vue";
 import { useLayoutCardTools } from "@/hooks/useCardTools";
-import { useInstanceInfo } from "@/hooks/useInstance";
+import { useWindrosePlus } from "@/hooks/useWindrosePlus";
 import type { LayoutCard } from "@/types";
 import { computed, ref } from "vue";
 
@@ -9,7 +9,8 @@ const props = defineProps<{ card: LayoutCard }>();
 const { getMetaOrRouteValue } = useLayoutCardTools(props.card);
 const instanceId = getMetaOrRouteValue("instanceId") ?? "";
 const daemonId = getMetaOrRouteValue("daemonId") ?? "";
-const { instanceInfo } = useInstanceInfo({ instanceId, daemonId, autoRefresh: true });
+const { instanceInfo, enabled: windrosePlusEnabled, isLoading: isSaving, confirmToggle: confirmToggleWindrosePlus } =
+  useWindrosePlus(instanceId, daemonId);
 
 const storageKey = `windrose-plus-panel:${daemonId}:${instanceId}`;
 const dashboardUrl = ref(localStorage.getItem(storageKey) ?? "");
@@ -58,8 +59,33 @@ const useDetectedUrl = () => {
   <CardPanel style="height: 100%">
     <template #body>
       <a-space direction="vertical" style="width: 100%" size="middle">
+        <a-card size="small">
+          <a-space style="width: 100%; justify-content: space-between">
+            <a-space>
+              <a-badge :status="windrosePlusEnabled ? 'success' : 'default'" />
+              <strong>Windrose+ is {{ windrosePlusEnabled ? "installed" : "not installed" }}</strong>
+            </a-space>
+            <a-button
+              :type="windrosePlusEnabled ? 'default' : 'primary'"
+              :danger="windrosePlusEnabled"
+              :loading="isSaving"
+              @click="confirmToggleWindrosePlus"
+            >
+              {{ windrosePlusEnabled ? "Uninstall Windrose+" : "Install Windrose+" }}
+            </a-button>
+          </a-space>
+          <div class="mt-2 color-gray">
+            Uninstalling disables the add-on but preserves its configuration and Lua mods for later use.
+          </div>
+        </a-card>
         <a-alert
-          v-if="!dashboardPort"
+          v-if="!windrosePlusEnabled"
+          type="info"
+          show-icon
+          message="Install Windrose+ to use the live map and web RCON dashboard."
+        />
+        <a-alert
+          v-else-if="!dashboardPort"
           type="warning"
           show-icon
           message="Windrose+ dashboard port is not exposed"
@@ -73,7 +99,7 @@ const useDetectedUrl = () => {
           description="Browsers block an HTTP dashboard inside an HTTPS MCSManager page. Put the dashboard behind an HTTPS reverse proxy or Cloudflare Tunnel, then enter that public URL below."
         />
 
-        <a-input-group compact style="display: flex">
+        <a-input-group v-if="windrosePlusEnabled" compact style="display: flex">
           <a-input
             v-model:value="dashboardUrl"
             placeholder="https://windrose-plus.example.com"
@@ -88,21 +114,24 @@ const useDetectedUrl = () => {
         </a-input-group>
 
         <a-alert
-          v-if="dashboardUrl && !isValidUrl"
+          v-if="windrosePlusEnabled && dashboardUrl && !isValidUrl"
           type="error"
           show-icon
           message="Enter a valid HTTP or HTTPS dashboard URL."
         />
 
         <iframe
-          v-if="activeUrl"
+          v-if="windrosePlusEnabled && activeUrl"
           :key="frameKey"
           :src="activeUrl"
           title="Windrose+ web panel"
           allow="clipboard-read; clipboard-write"
           style="width: 100%; height: 75vh; border: 0; border-radius: 6px"
         />
-        <a-empty v-else description="Enter the Windrose+ dashboard URL to embed it here." />
+        <a-empty
+          v-else-if="windrosePlusEnabled"
+          description="Enter the Windrose+ dashboard URL to embed it here."
+        />
       </a-space>
     </template>
   </CardPanel>
