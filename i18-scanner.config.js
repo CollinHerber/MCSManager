@@ -2,7 +2,7 @@ const fs = require("fs");
 const { crc32 } = require("crc");
 
 const FN_KEY = "TXT_CODE_";
-const LANGUAGES = ["zh_CN", "en_US"];
+const LANGUAGES = ["en_US"];
 
 module.exports = {
   input: ["./**/*.{ts,vue}", "!**/node_modules/**"],

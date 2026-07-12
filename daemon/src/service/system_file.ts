@@ -5,7 +5,7 @@ import os from "os";
 import path from "path";
 import { compress, decompress } from "../common/compress";
 import { globalConfiguration } from "../entity/config";
-import { $t, i18next } from "../i18n";
+import { $t } from "../i18n";
 import { normalizedJoin } from "../tools/filepath";
 import { resolveRealPath } from "../tools/path_link_check";
 
@@ -33,10 +33,7 @@ export default class FileManager {
     } else {
       this.topPath = path.normalize(topPath);
     }
-    if (!fileCode) {
-      this.fileCode = "utf-8";
-      if (i18next.language == "zh_cn") this.fileCode = "gbk";
-    }
+    if (!fileCode) this.fileCode = "utf-8";
   }
 
   isRootTopRath() {

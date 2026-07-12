@@ -1,14 +1,7 @@
 <script setup lang="ts">
 import CardPanel from "@/components/CardPanel.vue";
 import { useAppRouters } from "@/hooks/useAppRouters";
-import {
-  getInitLanguage,
-  initInstallPageFlow,
-  setLanguage,
-  SUPPORTED_LANGS,
-  t,
-  toStandardLang
-} from "@/lang/i18n";
+import { getInitLanguage, t } from "@/lang/i18n";
 import { panelInstall } from "@/services/apis";
 import { useAppStateStore } from "@/stores/useAppStateStore";
 import { reportErrorMsg } from "@/tools/validator";
@@ -30,7 +23,7 @@ const skeletons = [
 
 const { updateUserInfo, updatePanelStatus, state: appState } = useAppStateStore();
 
-const step = ref(0);
+const step = ref(1);
 const { toPage } = useAppRouters();
 const formRef = ref<FormInstance>();
 const formData = reactive({
@@ -61,13 +54,6 @@ const createUser = async () => {
     installLoading.value = false;
   }
 };
-
-const setLang = (lang: string) => {
-  lang = toStandardLang(lang);
-  initInstallPageFlow(lang);
-  setLanguage(formData.language, false);
-};
-
 const toQuickStart = () => {
   toPage({
     path: "/market",
@@ -97,52 +83,6 @@ const toOverview = () => {
       </CardPanel>
     </a-col>
   </a-row>
-  <div v-if="step === 0" class="install-page-container">
-    <CardPanel :full-height="false" class="install-panel language-select-panel">
-      <template #body>
-        <a-typography style="text-align: center; margin-bottom: 40px">
-          <a-typography-title :level="2" style="margin-bottom: 8px"> Language </a-typography-title>
-          <a-typography-text type="secondary"> Choose your preferred language </a-typography-text>
-        </a-typography>
-
-        <div class="language-grid">
-          <div
-            v-for="lang in SUPPORTED_LANGS"
-            :key="lang.value"
-            class="language-card"
-            :class="{ 'language-card-active': formData.language === lang.value }"
-            @click="
-              () => {
-                formData.language = lang.value;
-                setLang(formData.language);
-              }
-            "
-          >
-            <div class="language-card-inner language-label">
-              {{ lang.label }}
-            </div>
-          </div>
-        </div>
-
-        <div class="text-center mt-35 mb-5">
-          <a-button
-            type="primary"
-            size="large"
-            style="min-width: 160px; height: 48px; font-size: 16px"
-            @click="
-              () => {
-                setLang(formData.language);
-                step++;
-              }
-            "
-          >
-            {{ t("TXT_CODE_5e9022f8") }}
-            <ArrowRightOutlined />
-          </a-button>
-        </div>
-      </template>
-    </CardPanel>
-  </div>
   <div v-if="step === 1" class="install-page-container" style="text-align: center">
     <CardPanel :full-height="false" class="install-panel">
       <template #body>

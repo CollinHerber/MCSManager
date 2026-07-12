@@ -6,7 +6,7 @@ import { useLayoutCardTools } from "@/hooks/useCardTools";
 import { useFileManager } from "@/hooks/useFileManager";
 import { useRightClickMenu } from "@/hooks/useRightClickMenu";
 import { useScreen } from "@/hooks/useScreen";
-import { getCurrentLang, t } from "@/lang/i18n";
+import { t } from "@/lang/i18n";
 import uploadService from "@/services/uploadService";
 import { arrayFilter } from "@/tools/array";
 import { filterFileName, getFileExtName, getFileIcon, isCompressFile } from "@/tools/fileManager";
@@ -853,13 +853,6 @@ onUnmounted(() => {
 
     <a-space v-if="dialog.mode == 'unzip'" direction="vertical" class="w-100 mt-16">
       <a-typography-title :level="5">{{ t("TXT_CODE_2841f4a") }}</a-typography-title>
-      <a-typography-text v-if="getCurrentLang() == 'zh_cn'" type="secondary">
-        {{ t("TXT_CODE_b278707d") }}
-        <br />
-        {{ t("TXT_CODE_48044fc2") }}
-        <br />
-        {{ t("TXT_CODE_76a82338") }}
-      </a-typography-text>
       <a-radio-group v-model:value="dialog.code">
         <a-radio-button value="utf-8">UTF-8</a-radio-button>
         <a-radio-button value="gbk">GBK</a-radio-button>
