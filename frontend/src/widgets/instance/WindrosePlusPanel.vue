@@ -111,14 +111,6 @@ const useDetectedUrl = () => {
           description="Browsers block an HTTP dashboard inside an HTTPS MCSManager page. Put the dashboard behind an HTTPS reverse proxy or Cloudflare Tunnel, then enter that public URL below."
         />
 
-        <a-alert
-          v-if="windrosePlusEnabled && !isDocker"
-          type="warning"
-          show-icon
-          message="Set a dashboard password"
-          description="Edit windrose_plus.json and replace the default rcon.password value. Windrose+ rejects the default 'changeme' password for remote dashboard access."
-        />
-
         <a-input-group v-if="windrosePlusEnabled" compact style="display: flex">
           <a-input
             v-model:value="dashboardUrl"
