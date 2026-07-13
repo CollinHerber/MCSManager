@@ -32,6 +32,7 @@ export const TYPE_HYTALE = "hytale";
 export const TYPE_STEAM_SERVER_UNIVERSAL = "steam/universal";
 export const TYPE_PALWORLD = "steam/palworld";
 export const TYPE_ENSHROUDED = "steam/enshrouded";
+export const TYPE_WINDROSE = "steam/windrose";
 export const TYPE_TERRARIA = "steam/terraria";
 
 export const INSTANCE_TYPE_TRANSLATION: MapData<string> = {
@@ -39,6 +40,7 @@ export const INSTANCE_TYPE_TRANSLATION: MapData<string> = {
   [TYPE_STEAM_SERVER_UNIVERSAL]: t("TXT_CODE_3d7fbe30"),
   [TYPE_PALWORLD]: t("TXT_CODE_palworld.type"),
   [TYPE_ENSHROUDED]: "Enshrouded Dedicated Server",
+  [TYPE_WINDROSE]: "Windrose Dedicated Server",
   [TYPE_MINECRAFT_JAVA]: t("TXT_CODE_97f779b3"),
   [TYPE_MINECRAFT_BEDROCK]: t("TXT_CODE_7f1aef9f"),
   [TYPE_MINECRAFT_NUKKIT]: t("TXT_CODE_8f3e5807"),
@@ -444,6 +446,22 @@ export const INSTANCE_CONFIGS: InstanceConfigs[] = [
     type: "json",
     info: "Configure server access and every documented Enshrouded gameplay setting.",
     category: [TYPE_ENSHROUDED]
+  },
+  {
+    fileName: "[Windrose] ServerDescription.json",
+    path: "R5/ServerDescription.json",
+    redirect: "windrose/ServerDescription.json",
+    type: "json",
+    info: "Configure Windrose server connection, name, password, region, and player limit.",
+    category: [TYPE_WINDROSE]
+  },
+  {
+    fileName: "[Windrose+] windrose_plus.json",
+    path: "windrose_plus.json",
+    redirect: "windrose/windrose_plus.json",
+    type: "json",
+    info: "Configure Windrose+ RCON, live map, multipliers, and feature flags.",
+    category: [TYPE_WINDROSE]
   },
   {
     fileName: "[Terraria] serverconfig.txt",

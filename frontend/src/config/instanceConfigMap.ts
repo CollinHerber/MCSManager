@@ -31,6 +31,42 @@ export const configData: {
     config: Record<string, any>;
   };
 } = {
+  "windrose/ServerDescription.json": {
+    desc: "Windrose server connection and identity settings. Stop the server before saving.",
+    config: {
+      ServerDescription_Persistent: {
+        InviteCode: {
+          description: "Case-sensitive invite code (at least 6 alphanumeric characters).",
+          control: "text"
+        },
+        UseDirectConnection: {
+          description: "Allow players to connect directly by IP and port instead of invite code.",
+          control: "boolean"
+        },
+        DirectConnectionServerPort: numberField("Direct-connection port.", 1, 65535, 1),
+        DirectConnectionProxyAddress: {
+          description: "Address used by the direct-connection proxy.",
+          control: "text"
+        },
+        UserSelectedRegion: selectField("Connection-service region.", ["SEA", "CIS", "EU"]),
+        IsPasswordProtected: {
+          description: "Require a password to join.",
+          control: "boolean"
+        },
+        Password: { description: "Server join password.", control: "password" },
+        ServerName: { description: "Server name shown to players.", control: "text" },
+        MaxPlayerCount: numberField("Maximum simultaneous players.", 1, 10, 1),
+        P2pProxyAddress: {
+          description: "Internal P2P proxy address; keep 127.0.0.1 in Docker.",
+          control: "text"
+        }
+      }
+    }
+  },
+  "windrose/windrose_plus.json": {
+    desc: "Windrose+ live map, RCON, multiplier, and feature settings. Unknown options remain editable.",
+    config: {}
+  },
   "enshrouded/enshrouded_server.json": {
     desc: "Enshrouded dedicated-server settings. Individual gameplay values apply only when gameSettingsPreset is Custom.",
     config: {
