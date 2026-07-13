@@ -151,9 +151,7 @@ const btns = computed(() => {
       title: windrosePlusEnabled.value ? "Uninstall Windrose+" : "Install Windrose+",
       icon: DashboardOutlined,
       condition: () =>
-        !isGlobalTerminal.value &&
-        instanceInfo.value?.config.type === TYPE_WINDROSE &&
-        instanceInfo.value?.config.processType === "docker",
+        !isGlobalTerminal.value && instanceInfo.value?.config.type === TYPE_WINDROSE,
       click: confirmWindrosePlusToggle,
       props: {
         loading: isWindrosePlusLoading.value,
