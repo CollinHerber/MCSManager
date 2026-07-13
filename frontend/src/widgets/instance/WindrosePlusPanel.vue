@@ -17,6 +17,7 @@ const dashboardUrl = ref(localStorage.getItem(storageKey) ?? "");
 const activeUrl = ref(dashboardUrl.value);
 const frameKey = ref(0);
 const isHttps = window.location.protocol === "https:";
+const isDocker = computed(() => instanceInfo.value?.config?.processType === "docker");
 
 const dashboardPort = computed(() => {
   const ports = instanceInfo.value?.config?.docker?.ports ?? [];
@@ -26,8 +27,12 @@ const dashboardPort = computed(() => {
 });
 
 const detectedUrl = computed(() => {
-  if (!dashboardPort.value) return "";
-  return `http://${window.location.hostname}:${dashboardPort.value}`;
+  if (isDocker.value) {
+    if (!dashboardPort.value) return "";
+    return `http://${window.location.hostname}:${dashboardPort.value}`;
+  }
+  if (isHttps) return "";
+  return `http://${window.location.hostname}:8780`;
 });
 
 const isValidUrl = computed(() => {
@@ -85,11 +90,18 @@ const useDetectedUrl = () => {
           message="Install Windrose+ to use the live map and web RCON dashboard."
         />
         <a-alert
-          v-else-if="!dashboardPort"
+          v-else-if="isDocker && !dashboardPort"
           type="warning"
           show-icon
           message="Windrose+ dashboard port is not exposed"
           description="Use the Windrose+ marketplace template or add a TCP mapping for container port 8780, then restart the instance."
+        />
+        <a-alert
+          v-else-if="!isDocker && !activeUrl"
+          type="info"
+          show-icon
+          message="Connect the native Windrose+ dashboard"
+          description="The dashboard starts with the Windows server on port 8780. For remote HTTPS access, publish that port through your reverse proxy or Cloudflare Tunnel, then enter its HTTPS URL below."
         />
         <a-alert
           v-else-if="isHttps && (!activeUrl || activeUrl.startsWith('http:'))"
@@ -97,6 +109,14 @@ const useDetectedUrl = () => {
           show-icon
           message="HTTPS address required for embedding"
           description="Browsers block an HTTP dashboard inside an HTTPS MCSManager page. Put the dashboard behind an HTTPS reverse proxy or Cloudflare Tunnel, then enter that public URL below."
+        />
+
+        <a-alert
+          v-if="windrosePlusEnabled && !isDocker"
+          type="warning"
+          show-icon
+          message="Set a dashboard password"
+          description="Edit windrose_plus.json and replace the default rcon.password value. Windrose+ rejects the default 'changeme' password for remote dashboard access."
         />
 
         <a-input-group v-if="windrosePlusEnabled" compact style="display: flex">
