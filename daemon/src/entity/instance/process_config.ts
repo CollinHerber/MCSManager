@@ -5,6 +5,10 @@ import toml from "smol-toml";
 import yaml from "yaml";
 import { $t } from "../../i18n";
 import { parsePalworldConfig, stringifyPalworldConfig } from "./palworld_config";
+import {
+  parseSevenDaysToDieConfig,
+  stringifySevenDaysToDieConfig
+} from "./seven_days_to_die_config";
 
 const CONFIG_FILE_ENCODE = "utf-8";
 const LONG_MAGIC_PREFIX = "<__long__>";
@@ -58,6 +62,9 @@ export class ProcessConfig {
     if (this.iProcessConfig.type === "palworld_ini") {
       return parsePalworldConfig(text);
     }
+    if (this.iProcessConfig.type === "seven_days_to_die_xml") {
+      return parseSevenDaysToDieConfig(text);
+    }
   }
 
   // Automatically save to the local configuration file according to the parameter object
@@ -100,13 +107,22 @@ export class ProcessConfig {
     if (this.iProcessConfig.type === "palworld_ini") {
       text = stringifyPalworldConfig(object);
     }
+    if (this.iProcessConfig.type === "seven_days_to_die_xml") {
+      const template = fs.readFileSync(this.iProcessConfig.path, { encoding: CONFIG_FILE_ENCODE });
+      text = stringifySevenDaysToDieConfig(template, object as Record<string, unknown>);
+    }
     if (!text && this.iProcessConfig.type !== "txt")
       throw new Error($t("TXT_CODE_process_config.writEmpty"));
-    if (this.iProcessConfig.type === "palworld_ini") {
+    if (
+      this.iProcessConfig.type === "palworld_ini" ||
+      this.iProcessConfig.type === "seven_days_to_die_xml"
+    ) {
       const temporaryPath = `${this.iProcessConfig.path}.tmp-${process.pid}-${Date.now()}`;
       try {
         fs.writeFileSync(temporaryPath, text, { encoding: CONFIG_FILE_ENCODE });
-        parsePalworldConfig(fs.readFileSync(temporaryPath, CONFIG_FILE_ENCODE));
+        const writtenText = fs.readFileSync(temporaryPath, CONFIG_FILE_ENCODE);
+        if (this.iProcessConfig.type === "palworld_ini") parsePalworldConfig(writtenText);
+        else parseSevenDaysToDieConfig(writtenText);
         fs.moveSync(temporaryPath, this.iProcessConfig.path, { overwrite: true });
       } finally {
         if (fs.existsSync(temporaryPath)) fs.removeSync(temporaryPath);

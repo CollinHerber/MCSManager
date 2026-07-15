@@ -33,6 +33,7 @@ export const TYPE_STEAM_SERVER_UNIVERSAL = "steam/universal";
 export const TYPE_PALWORLD = "steam/palworld";
 export const TYPE_ENSHROUDED = "steam/enshrouded";
 export const TYPE_WINDROSE = "steam/windrose";
+export const TYPE_SEVEN_DAYS_TO_DIE = "steam/7dtd";
 export const TYPE_TERRARIA = "steam/terraria";
 
 export const INSTANCE_TYPE_TRANSLATION: MapData<string> = {
@@ -41,6 +42,7 @@ export const INSTANCE_TYPE_TRANSLATION: MapData<string> = {
   [TYPE_PALWORLD]: t("TXT_CODE_palworld.type"),
   [TYPE_ENSHROUDED]: "Enshrouded Dedicated Server",
   [TYPE_WINDROSE]: "Windrose Dedicated Server",
+  [TYPE_SEVEN_DAYS_TO_DIE]: "7 Days to Die Dedicated Server",
   [TYPE_MINECRAFT_JAVA]: t("TXT_CODE_97f779b3"),
   [TYPE_MINECRAFT_BEDROCK]: t("TXT_CODE_7f1aef9f"),
   [TYPE_MINECRAFT_NUKKIT]: t("TXT_CODE_8f3e5807"),
@@ -446,6 +448,14 @@ export const INSTANCE_CONFIGS: InstanceConfigs[] = [
     type: "json",
     info: "Configure server access and every documented Enshrouded gameplay setting.",
     category: [TYPE_ENSHROUDED]
+  },
+  {
+    fileName: "[7 Days to Die] sdtdserver.xml",
+    path: "sdtdserver.xml",
+    redirect: "seven-days-to-die/sdtdserver.xml",
+    type: "seven_days_to_die_xml",
+    info: "Configure server networking, access, world generation, gameplay, zombies, loot, and land claims.",
+    category: [TYPE_SEVEN_DAYS_TO_DIE]
   },
   {
     fileName: "[Windrose] ServerDescription.json",

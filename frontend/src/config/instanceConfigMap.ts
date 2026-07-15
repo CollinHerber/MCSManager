@@ -9,12 +9,13 @@ export interface ConfigField {
   options?: { label: string; value: string | number | boolean }[];
 }
 
-const numberField = (
-  description: string,
-  min: number,
-  max: number,
-  step = 0.1
-): ConfigField => ({ description, control: "number", min, max, step });
+const numberField = (description: string, min: number, max: number, step = 0.1): ConfigField => ({
+  description,
+  control: "number",
+  min,
+  max,
+  step
+});
 
 const selectField = (
   description: string,
@@ -31,6 +32,215 @@ export const configData: {
     config: Record<string, any>;
   };
 } = {
+  "seven-days-to-die/sdtdserver.xml": {
+    desc: "7 Days to Die dedicated-server settings. The XML structure, comments, ordering, and unknown properties are preserved when saving. Stop the server before changing world-generation settings.",
+    config: {
+      ServerName: { description: "Server name shown in the server browser.", control: "text" },
+      ServerDescription: {
+        description: "Description shown in the server browser.",
+        control: "text"
+      },
+      ServerWebsiteURL: { description: "Clickable server website URL.", control: "text" },
+      ServerPassword: { description: "Password required to join the server.", control: "password" },
+      ServerLoginConfirmationText: {
+        description: "Rules or confirmation message players must accept when joining.",
+        control: "text"
+      },
+      Region: selectField("Server browser region.", [
+        "NorthAmericaEast",
+        "NorthAmericaWest",
+        "CentralAmerica",
+        "SouthAmerica",
+        "Europe",
+        "Russia",
+        "Asia",
+        "MiddleEast",
+        "Africa",
+        "Oceania"
+      ]),
+      Language: {
+        description: "Primary language advertised in the server browser.",
+        control: "text"
+      },
+      ServerPort: numberField("Primary game port. Match the Docker port mapping.", 1, 65535, 1),
+      ServerVisibility: selectField(
+        "Server visibility: private, friends-only, or public.",
+        [0, 1, 2]
+      ),
+      ServerDisabledNetworkProtocols: {
+        description: "Comma-separated protocols to disable, such as SteamNetworking.",
+        control: "text"
+      },
+      ServerMaxWorldTransferSpeedKiBs: numberField(
+        "Maximum world-download speed per client in KiB/s.",
+        1,
+        1300,
+        1
+      ),
+      ServerMaxPlayerCount: numberField("Maximum concurrent players.", 1, 64, 1),
+      ServerReservedSlots: numberField("Slots reserved for privileged players.", 0, 64, 1),
+      ServerReservedSlotsPermission: numberField(
+        "Permission level required for a reserved slot.",
+        0,
+        1000,
+        1
+      ),
+      ServerAdminSlots: numberField("Additional slots available to administrators.", 0, 64, 1),
+      ServerAdminSlotsPermission: numberField(
+        "Permission level required for an admin slot.",
+        0,
+        1000,
+        1
+      ),
+      WebDashboardEnabled: {
+        description: "Enable the built-in web dashboard.",
+        control: "boolean"
+      },
+      WebDashboardPort: numberField("Built-in web dashboard port.", 1, 65535, 1),
+      WebDashboardUrl: {
+        description: "External URL when the dashboard is behind a reverse proxy.",
+        control: "text"
+      },
+      EnableMapRendering: {
+        description: "Render explored map tiles for the web dashboard.",
+        control: "boolean"
+      },
+      TelnetEnabled: {
+        description: "Enable the telnet administration interface.",
+        control: "boolean"
+      },
+      TelnetPort: numberField("Telnet administration port.", 1, 65535, 1),
+      TelnetPassword: {
+        description: "Telnet password. Set one before exposing the port.",
+        control: "password"
+      },
+      TelnetFailedLoginLimit: numberField("Failed logins before a client is blocked.", 1, 100, 1),
+      TelnetFailedLoginsBlocktime: numberField(
+        "Failed-login block duration in seconds.",
+        1,
+        86400,
+        1
+      ),
+      EACEnabled: { description: "Enable Easy Anti-Cheat.", control: "boolean" },
+      HideCommandExecutionLog: selectField("Command logging visibility.", [0, 1, 2, 3]),
+      PersistentPlayerProfiles: {
+        description: "Lock players to the profile used on their previous connection.",
+        control: "boolean"
+      },
+      GameWorld: {
+        description: "World name to load, or RWG for random world generation.",
+        control: "text"
+      },
+      WorldGenSeed: { description: "Seed used when GameWorld is RWG.", control: "text" },
+      WorldGenSize: numberField("Generated-world width and height.", 2048, 16384, 2048),
+      GameName: { description: "Save-game name and decoration seed.", control: "text" },
+      GameMode: selectField("Game mode.", ["GameModeSurvival"]),
+      GameDifficulty: selectField(
+        "Difficulty from easiest (0) to hardest (5).",
+        [0, 1, 2, 3, 4, 5]
+      ),
+      BlockDamagePlayer: numberField("Player block-damage percentage.", 0, 1000, 1),
+      BlockDamageAI: numberField("AI block-damage percentage outside blood moons.", 0, 1000, 1),
+      BlockDamageAIBM: numberField("AI block-damage percentage during blood moons.", 0, 1000, 1),
+      XPMultiplier: numberField("Experience-gain percentage.", 0, 1000, 1),
+      PlayerSafeZoneLevel: numberField("Highest level that receives a spawn safe zone.", 0, 300, 1),
+      PlayerSafeZoneHours: numberField(
+        "In-game hours the new-player safe zone remains active.",
+        0,
+        1000,
+        1
+      ),
+      BuildCreate: { description: "Enable cheat/build mode.", control: "boolean" },
+      DayNightLength: numberField("Real-time minutes in one in-game day.", 10, 240, 1),
+      DayLightLength: numberField("Daylight hours in each in-game day.", 0, 24, 1),
+      DeathPenalty: selectField("Penalty applied after death.", [0, 1, 2, 3]),
+      DropOnDeath: selectField("Items dropped on death.", [0, 1, 2, 3, 4]),
+      DropOnQuit: selectField("Items dropped when quitting.", [0, 1, 2, 3]),
+      BedrollDeadZoneSize: numberField("Bedroll enemy-spawn exclusion radius.", 0, 100, 1),
+      BedrollExpiryTime: numberField(
+        "Real-world days before an inactive bedroll expires.",
+        0,
+        365,
+        1
+      ),
+      MaxSpawnedZombies: numberField(
+        "Maximum zombies across the whole map; high values affect performance.",
+        0,
+        512,
+        1
+      ),
+      MaxSpawnedAnimals: numberField("Maximum animals across the whole map.", 0, 512, 1),
+      ServerMaxAllowedViewDistance: numberField("Maximum client view distance.", 6, 12, 1),
+      MaxQueuedMeshLayers: numberField("Maximum queued chunk-mesh layers.", 100, 10000, 1),
+      EnemySpawnMode: { description: "Enable enemy spawning.", control: "boolean" },
+      EnemyDifficulty: selectField("Normal or feral enemies.", [0, 1]),
+      ZombieFeralSense: selectField("Feral sense: off, day, night, or always.", [0, 1, 2, 3]),
+      ZombieMove: selectField("Zombie movement speed during the day.", [0, 1, 2, 3, 4]),
+      ZombieMoveNight: selectField("Zombie movement speed at night.", [0, 1, 2, 3, 4]),
+      ZombieFeralMove: selectField("Feral zombie movement speed.", [0, 1, 2, 3, 4]),
+      ZombieBMMove: selectField("Blood-moon zombie movement speed.", [0, 1, 2, 3, 4]),
+      BloodMoonFrequency: numberField("Days between blood moons; 0 disables them.", 0, 100, 1),
+      BloodMoonRange: numberField("Random day deviation from the blood-moon frequency.", 0, 100, 1),
+      BloodMoonWarning: numberField(
+        "Hour when the blood-moon warning begins; -1 disables it.",
+        -1,
+        24,
+        1
+      ),
+      BloodMoonEnemyCount: numberField(
+        "Maximum simultaneous blood-moon zombies per player.",
+        0,
+        64,
+        1
+      ),
+      LootAbundance: numberField("Loot quantity percentage.", 0, 1000, 1),
+      LootRespawnDays: numberField("Days before loot respawns; 0 disables respawn.", 0, 365, 1),
+      AirDropFrequency: numberField("In-game hours between airdrops; 0 disables them.", 0, 1000, 1),
+      AirDropMarker: { description: "Show airdrops on the map and compass.", control: "boolean" },
+      PartySharedKillRange: numberField("Distance for shared party kill XP.", 0, 10000, 1),
+      PlayerKillingMode: selectField("Player-versus-player rules.", [0, 1, 2, 3]),
+      LandClaimCount: numberField("Maximum land claims per player.", 0, 100, 1),
+      LandClaimSize: numberField("Protected land-claim size in blocks.", 1, 256, 1),
+      LandClaimDeadZone: numberField("Minimum distance between unrelated land claims.", 0, 256, 1),
+      LandClaimExpiryTime: numberField("Offline days before a land claim expires.", 0, 365, 1),
+      LandClaimDecayMode: selectField("Offline land-claim decay mode.", [0, 1, 2]),
+      LandClaimOnlineDurabilityModifier: numberField(
+        "Online land-claim durability multiplier; 0 is infinite.",
+        0,
+        256,
+        1
+      ),
+      LandClaimOfflineDurabilityModifier: numberField(
+        "Offline land-claim durability multiplier; 0 is infinite.",
+        0,
+        256,
+        1
+      ),
+      LandClaimOfflineDelay: numberField(
+        "Minutes before offline claim durability applies.",
+        0,
+        10080,
+        1
+      ),
+      DynamicMeshEnabled: { description: "Enable the dynamic mesh system.", control: "boolean" },
+      DynamicMeshLandClaimOnly: {
+        description: "Limit dynamic mesh generation to land claims.",
+        control: "boolean"
+      },
+      MaxChunkAge: numberField(
+        "In-game days before unvisited chunks may reset; negative disables it.",
+        -1,
+        10000,
+        1
+      ),
+      SaveDataLimit: numberField(
+        "Per-save disk limit in MB; negative disables the limit.",
+        -1,
+        1000000,
+        1
+      )
+    }
+  },
   "windrose/ServerDescription.json": {
     desc: "Windrose server connection and identity settings. Stop the server before saving.",
     config: {
@@ -127,7 +337,11 @@ export const configData: {
         plantGrowthSpeedFactor: numberField("Plant-growth speed multiplier.", 0.25, 2),
         resourceDropStackAmountFactor: numberField("Resource stack-size multiplier.", 0.25, 2),
         factoryProductionSpeedFactor: numberField("Workshop production-speed multiplier.", 0.25, 2),
-        perkUpgradeRecyclingFactor: numberField("Rune return when salvaging upgraded weapons.", 0, 1),
+        perkUpgradeRecyclingFactor: numberField(
+          "Rune return when salvaging upgraded weapons.",
+          0,
+          1
+        ),
         perkCostFactor: numberField("Weapon-upgrade Rune-cost multiplier.", 0.25, 2),
         experienceCombatFactor: numberField("Combat experience multiplier.", 0.25, 2),
         experienceMiningFactor: numberField("Mining experience multiplier.", 0, 2),
