@@ -5,11 +5,13 @@ import { useAppRouters } from "@/hooks/useAppRouters";
 import {
   TYPE_MINECRAFT_JAVA,
   TYPE_MINECRAFT_MCDR,
+  TYPE_SEVEN_DAYS_TO_DIE,
   TYPE_STEAM_SERVER_UNIVERSAL,
   TYPE_WINDROSE,
   useInstanceInfo
 } from "@/hooks/useInstance";
 import { useServerConfig } from "@/hooks/useServerConfig";
+import { useSevenDaysToDieMods } from "@/hooks/useSevenDaysToDieMods";
 import { useWindrosePlus } from "@/hooks/useWindrosePlus";
 import { t } from "@/lang/i18n";
 import { modListApi } from "@/services/apis/modManager";
@@ -23,6 +25,7 @@ import {
   ControlOutlined,
   DashboardOutlined,
   FieldTimeOutlined,
+  FileZipOutlined,
   FolderOpenOutlined,
   UsbOutlined,
   UsergroupDeleteOutlined
@@ -75,6 +78,7 @@ const { instanceInfo, execute, isGlobalTerminal } = useInstanceInfo({
 });
 
 const { serverConfigFiles, refresh: refreshServerConfig } = useServerConfig();
+const { downloadModsZip } = useSevenDaysToDieMods(instanceId, daemonId);
 
 const folders = ref<string[]>([]);
 const foldersLoaded = ref(false);
@@ -146,6 +150,15 @@ const btns = computed(() => {
           }
         });
       }
+    },
+    {
+      title: "Download Mods Zip",
+      icon: FileZipOutlined,
+      condition: () =>
+        !isGlobalTerminal.value &&
+        instanceInfo.value?.config.type === TYPE_SEVEN_DAYS_TO_DIE &&
+        (state.settings.canFileManager || isAdmin.value),
+      click: downloadModsZip
     },
     {
       title: windrosePlusEnabled.value ? "Uninstall Windrose+" : "Install Windrose+",
