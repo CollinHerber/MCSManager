@@ -304,13 +304,19 @@ export class SetupDockerContainer extends AsyncTask {
     let cwd = instance.absoluteCwdPath();
     const defaultInstanceDir = InstanceSubsystem.getInstanceDataDir();
     const hostRealPath = toText(process.env.MCSM_DOCKER_WORKSPACE_PATH);
-    if (hostRealPath && cwd.includes(defaultInstanceDir)) {
-      cwd = path.normalize(path.join(hostRealPath, instance.instanceUuid));
-    }
+    const toDockerHostPath = (hostPath: string) => {
+      const normalizedPath = path.normalize(hostPath);
+      const relativePath = path.relative(defaultInstanceDir, normalizedPath);
+      if (hostRealPath && !relativePath.startsWith("..") && !path.isAbsolute(relativePath)) {
+        return path.normalize(path.join(hostRealPath, relativePath));
+      }
+      return normalizedPath;
+    };
+    cwd = toDockerHostPath(cwd);
 
     const mounts: Docker.MountConfig = [];
     for (const v of extraBinds) {
-      const hostPath = await instance.parseTextParams(v.hostPath);
+      const hostPath = toDockerHostPath(await instance.parseTextParams(v.hostPath));
       if (!fs.existsSync(hostPath)) fs.mkdirsSync(hostPath);
       mounts.push({
         Type: "bind",

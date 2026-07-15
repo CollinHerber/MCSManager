@@ -150,6 +150,14 @@ onMounted(async () => {
         <a-alert type="warning" show-icon :message="t('TXT_CODE_palworld.runningWarning')" />
       </a-col>
 
+      <a-col v-if="extName === 'seven_days_to_die_xml' && isRunning" :span="24">
+        <a-alert
+          type="warning"
+          show-icon
+          message="Stop the 7 Days to Die server before saving configuration changes. Running servers may overwrite this file during shutdown."
+        />
+      </a-col>
+
       <configComponent
         v-if="configName && isReady"
         :config="configFile"
