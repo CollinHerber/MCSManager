@@ -148,6 +148,21 @@ export class SetupDockerContainer extends AsyncTask {
       extraBinds.push({ hostPath, containerPath });
     }
 
+    // Named volumes keep performance-sensitive game binaries on Docker's native
+    // Linux filesystem instead of a Docker Desktop Windows bind mount.
+    const namedVolumes = dockerConfig.namedVolumes || [];
+    const extraNamedVolumes: { name: string; containerPath: string }[] = [];
+    for (const item of namedVolumes) {
+      if (!item) throw new Error($t("TXT_CODE_ae441ea3"));
+      const paths = item.split("|");
+      if (paths.length < 2) throw new Error($t("TXT_CODE_dca030b8"));
+      const volumeName = await instance.parseTextParams(paths[0]);
+      if (!/^[a-zA-Z0-9][a-zA-Z0-9_.-]*$/.test(volumeName)) {
+        throw new Error(`Invalid Docker named volume: ${volumeName}`);
+      }
+      extraNamedVolumes.push({ name: volumeName, containerPath: path.normalize(paths[1]) });
+    }
+
     const parseBlkioString = (input: string) => {
       const match = input.trim().match(/^([^:]+):(\d+)([KMG]?B?)$/i);
       if (!match) return null;
@@ -321,6 +336,13 @@ export class SetupDockerContainer extends AsyncTask {
       mounts.push({
         Type: "bind",
         Source: hostPath,
+        Target: await instance.parseTextParams(v.containerPath)
+      });
+    }
+    for (const v of extraNamedVolumes) {
+      mounts.push({
+        Type: "volume",
+        Source: v.name,
         Target: await instance.parseTextParams(v.containerPath)
       });
     }

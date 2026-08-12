@@ -236,6 +236,7 @@ export default class Instance extends EventEmitter {
       configureEntityParams(this.config.docker, cfg.docker, "memory", Number);
       configureEntityParams(this.config.docker, cfg.docker, "ports");
       configureEntityParams(this.config.docker, cfg.docker, "extraVolumes");
+      configureEntityParams(this.config.docker, cfg.docker, "namedVolumes");
       configureEntityParams(this.config.docker, cfg.docker, "maxSpace", Number);
       configureEntityParams(this.config.docker, cfg.docker, "io", Number);
       configureEntityParams(this.config.docker, cfg.docker, "network", Number);

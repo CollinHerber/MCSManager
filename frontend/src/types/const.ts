@@ -104,6 +104,7 @@ export const defaultDockerConfig: IGlobalInstanceDockerConfig = {
   memory: undefined,
   ports: [],
   extraVolumes: [],
+  namedVolumes: [],
   maxSpace: undefined,
   network: undefined,
   io: undefined,
