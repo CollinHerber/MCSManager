@@ -277,6 +277,56 @@ export const configData: {
     desc: "Windrose+ live map, RCON, multiplier, and feature settings. Unknown options remain editable.",
     config: {}
   },
+  "vrising/ServerHostSettings.json": {
+    desc: "V Rising host settings. Game and query ports must remain 9876 and 9877 to match the Docker mappings. RCON is managed internally by the container for graceful shutdown. Unknown settings remain editable.",
+    config: {
+      Name: { description: "Server name shown in the server list.", control: "text" },
+      Description: { description: "Short description shown in the server list and on join.", control: "text" },
+      Port: numberField("Internal UDP game port. Keep this at 9876.", 1, 65535, 1),
+      QueryPort: numberField("Internal UDP query port. Keep this at 9877.", 1, 65535, 1),
+      Address: { description: "Optional bind address; leave empty to bind normally in Docker.", control: "text" },
+      HideIPAddress: { description: "Use EOS relay and hide the advertised IP address.", control: "boolean" },
+      MaxConnectedUsers: numberField("Maximum concurrent players.", 1, 128, 1),
+      MaxConnectedAdmins: numberField("Admins allowed to connect when the server is full.", 0, 128, 1),
+      ServerFps: numberField("Target server simulation frame rate.", 1, 120, 1),
+      LowerFPSWhenEmpty: { description: "Reduce server FPS when no players are connected.", control: "boolean" },
+      LowerFPSWhenEmptyValue: numberField("Target FPS while the server is empty.", 1, 120, 1),
+      Password: { description: "Password required to join; leave empty for a public server.", control: "password" },
+      Secure: { description: "Enable VAC protection.", control: "boolean" },
+      ListOnEOS: { description: "Advertise the server through the EOS server list.", control: "boolean" },
+      ListOnSteam: { description: "Advertise the server through the Steam server list.", control: "boolean" },
+      GameSettingsPreset: selectField("Gameplay preset. Use an empty value when managing ServerGameSettings.json directly.", ["", "StandardPvE", "StandardPvP", "HardcorePvE", "HardcorePvP", "Custom"]),
+      GameDifficultyPreset: selectField("Optional difficulty preset.", ["", "Difficulty_Easy", "Difficulty_Normal", "Difficulty_Brutal"]),
+      SaveName: { description: "Save directory name.", control: "text" },
+      AutoSaveCount: numberField("Number of automatic saves to retain.", 1, 1000, 1),
+      AutoSaveInterval: numberField("Seconds between automatic saves.", 10, 86400, 1),
+      AutoSaveSmartKeep: { description: "Advanced age-bucket retention policy.", control: "text" },
+      LanMode: { description: "Enable LAN-only mode.", control: "boolean" },
+      ResetDaysInterval: numberField("Days between automatic world resets; 0 disables resets.", 0, 3650, 1),
+      DayOfReset: selectField("Restrict automatic resets to a weekday.", ["Any", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
+    }
+  },
+  "vrising/ServerGameSettings.json": {
+    desc: "V Rising gameplay settings. Unknown and newly added settings remain editable.",
+    config: {
+      GameModeType: selectField("PvE or PvP game mode.", ["PvE", "PvP"]),
+      CastleDamageMode: selectField("When enemy players can damage castles.", ["Never", "Always", "TimeRestricted"]),
+      PlayerDamageMode: selectField("When players can damage each other.", ["Always", "TimeRestricted"]),
+      ClanSize: numberField("Maximum players in a clan.", 1, 50, 1),
+      BloodBoundEquipment: { description: "Keep equipped items after death.", control: "boolean" },
+      TeleportBoundItems: { description: "Prevent teleporting while carrying bound items.", control: "boolean" },
+      InventoryStacksModifier: numberField("Inventory stack-size multiplier.", 0.1, 10),
+      DropTableModifier_General: numberField("General loot multiplier.", 0, 10),
+      MaterialYieldModifier_Global: numberField("Resource yield multiplier.", 0, 10),
+      CastleDecayRateModifier: numberField("Castle decay-rate multiplier.", 0, 10),
+      CastleBloodEssenceDrainModifier: numberField("Castle blood drain multiplier.", 0, 10),
+      PlayerHealthModifier: numberField("Player health multiplier.", 0.1, 10),
+      PlayerPhysicalPowerModifier: numberField("Player physical-power multiplier.", 0.1, 10),
+      PlayerSpellPowerModifier: numberField("Player spell-power multiplier.", 0.1, 10),
+      VBloodUnitHealthModifier: numberField("V Blood boss health multiplier.", 0.1, 10),
+      VBloodUnitDamageModifier: numberField("V Blood boss damage multiplier.", 0.1, 10)
+    }
+  },
   "enshrouded/enshrouded_server.json": {
     desc: "Enshrouded dedicated-server settings. Individual gameplay values apply only when gameSettingsPreset is Custom.",
     config: {
