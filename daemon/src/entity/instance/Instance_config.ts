@@ -70,6 +70,7 @@ export default class InstanceConfig implements IGlobalInstanceConfig {
     downloadSpeedLimit: 0,
     ports: [],
     extraVolumes: [],
+    namedVolumes: [],
     capAdd: [],
     capDrop: [],
     devices: [],

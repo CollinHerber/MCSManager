@@ -82,6 +82,7 @@ declare global {
     memory?: number;
     ports?: string[];
     extraVolumes?: string[];
+    namedVolumes?: string[];
     maxSpace?: number;
     network?: number;
     io?: number;
