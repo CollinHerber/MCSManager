@@ -34,6 +34,7 @@ export const TYPE_PALWORLD = "steam/palworld";
 export const TYPE_ENSHROUDED = "steam/enshrouded";
 export const TYPE_WINDROSE = "steam/windrose";
 export const TYPE_SEVEN_DAYS_TO_DIE = "steam/7dtd";
+export const TYPE_VRISING = "steam/vrising";
 export const TYPE_TERRARIA = "steam/terraria";
 
 export const INSTANCE_TYPE_TRANSLATION: MapData<string> = {
@@ -43,6 +44,7 @@ export const INSTANCE_TYPE_TRANSLATION: MapData<string> = {
   [TYPE_ENSHROUDED]: "Enshrouded Dedicated Server",
   [TYPE_WINDROSE]: "Windrose Dedicated Server",
   [TYPE_SEVEN_DAYS_TO_DIE]: "7 Days to Die Dedicated Server",
+  [TYPE_VRISING]: "V Rising Dedicated Server",
   [TYPE_MINECRAFT_JAVA]: t("TXT_CODE_97f779b3"),
   [TYPE_MINECRAFT_BEDROCK]: t("TXT_CODE_7f1aef9f"),
   [TYPE_MINECRAFT_NUKKIT]: t("TXT_CODE_8f3e5807"),
@@ -456,6 +458,22 @@ export const INSTANCE_CONFIGS: InstanceConfigs[] = [
     type: "seven_days_to_die_xml",
     info: "Configure server networking, access, world generation, gameplay, zombies, loot, and land claims.",
     category: [TYPE_SEVEN_DAYS_TO_DIE]
+  },
+  {
+    fileName: "[V Rising] ServerHostSettings.json",
+    path: "Settings/ServerHostSettings.json",
+    redirect: "vrising/ServerHostSettings.json",
+    type: "json",
+    info: "Configure V Rising server identity, ports, access, listing, saves, and resets. Generated after the first start.",
+    category: [TYPE_VRISING]
+  },
+  {
+    fileName: "[V Rising] ServerGameSettings.json",
+    path: "Settings/ServerGameSettings.json",
+    redirect: "vrising/ServerGameSettings.json",
+    type: "json",
+    info: "Configure V Rising gameplay settings. Set GameSettingsPreset appropriately for custom settings to take effect.",
+    category: [TYPE_VRISING]
   },
   {
     fileName: "[Windrose] ServerDescription.json",
